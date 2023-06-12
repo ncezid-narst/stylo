@@ -1,12 +1,6 @@
-# Schtappe
-
-Welcome to Schtappe, what is going to be a suite of Nextflow workflows created to address a variety of CDC/NCEZID/DFWED/EDLB/NARST Nanopore sequencing bioinformatics needs. Although Schtappe is intended for CDC users, the portable nature of Nextflow should allow for external users to easily adapt these workflows to their specific environments and/or needs. To facilitate that, all of the processes use Singularity containers.
-
-As of 4/17/2023, the workflows currently available include:
-
- * Stylo - Nanopore assembly workflow from basecalled reads to polished assembly plus assembly QC, metrics, and plasmid replicon detection
-
-See [Future Plans](#future-plans) for information on updates to existing and in-development workflows.
+# Stylo
+ 
+Nanopore assembly workflow from basecalled reads to polished assembly plus assembly QC, metrics, and plasmid replicon detection
 
 ## Install
 Navigate to your home directory and git clone the repository.
@@ -21,11 +15,7 @@ If you're working on CDC servers, run `module load nextflow/XX.XX.X` to load Nex
 
 As of 4/17/2023, this workflow was developed on Nextflow version 22.10.6.
 
-## Workflows
-
-### Stylo
-
-#### Overview:
+## Overview:
 * READFILTERING - Filters reads based on read-length using Nanoq
 * DOWNSAMPLE - Randomly downsamples read set based on organism genome size and desired coverage using Rasusa
 * ASSEMBLE - Generates long-read assembly using Flye
@@ -40,7 +30,7 @@ As of 4/17/2023, this workflow was developed on Nextflow version 22.10.6.
 
 ![image](https://user-images.githubusercontent.com/112518496/232568302-f03f21ca-0918-402c-a3e5-2bd499e1a135.png)
 
-#### Parameters:
+## Parameters:
 Parameters for each process can be changed in `stylo.config` under the first bracketed section `params`. Check out [Resources](#resources) for links to each process's main github page to learn more about process-specific parameters.
 
 Prior to running stylo, make sure the INITIAL PARAMETERS are set accurately - the default settings are as follows:
@@ -82,10 +72,10 @@ You can see how parameters are used in the next section **Usage**.
 
 NOTE: Support for hybrid assemblies using short-reads hasn't been added yet. This option was added as an experiment to test how well k-mer based assemblers perform with ONT's v14/r10.4.1 chemistry.
 
-#### Processes:
+## Processes:
 Directives for each process can be changed in `stylo.config` under the second bracketed section `process`. This is where you can update the containers used in each process. Check out [Resources](#resources) to see a full list of all the containers and the tools' githubs.
 
-#### Profiles:
+## Profiles:
 Configuration settings for each profile can be changed in `stylo.config` under the third bracketed section `profiles`. This is where you can update or create profiles that will dictate where and how each process is run. By default, there are two main profiles and three auxiliary profiles:
 
 * `standard`: Will execute stylo using the 'local' executor, running processes on the computer where Nextflow is launched. 
@@ -98,7 +88,7 @@ You can see how profiles are used in the next section **Usage**.
 
 NOTE: The default profile settings were mostly pulled from recommendations made by CDC Scicomp in their Nextflow training called 'Reproducible, scalable, and shareable analysis workflows with Nextflow'. There is a good chance you will have to create/modify your own profile to run stylo using your institution's computing environment. Check out [Resources](#resources) to learn more about creating profiles.
 
-#### Usage
+## Usage
 Once you've made the necessary changes to the configuration file to run the workflow on your computing environment and have set up inital parameters, you can run stylo just as you would any nextflow workflow:
 ```bash
 nextflow run /path/to/nanoporeWorkflow/schtappe/stylo.nf -c /path/to/nanoporeWorkflow/config/stylo.config
@@ -125,7 +115,7 @@ Run `nextflow help` or `nextflow run -help` for more information on nextflow fla
 
 NOTE: Nextflow applies the same parameters to each sample being processed. This means you'll want to run stylo on read sets all of the same organism or at least the same genome size and all have been generated using the same chemistry and guppy basecaller version (affects flye_read_type and medaka_model) This could change in the future by adding more fields to the sampleinfo sheet, but for now it is what it is.
 
-#### Output
+## Output
 Here's what stylo output looks like per sample(directories only):
 ```bash
 stylo/
@@ -177,17 +167,6 @@ stylo/
         └── hits
 ```
 
-## Future plans
-Small bug/typo/formatting issues aside, updates to stylo will likely include: 
-* Support for short-reads to run through Unicycler
-* More param options for each process (ideally I guess all of them?)
-* A barcode renaming script that will handle the read concatenating necessary to run the workflow
-* Test set of sample data
-
-Workflows in development:
-* Messer: Plasmid-recovery workflow to individually fix and assemble plasmid contigs
-* Geteilt: Assembly-based antibiotic-resistance screening workflow
-
 ## Resources
 ### Containers:
 * Nanoq:
@@ -220,21 +199,3 @@ Workflows in development:
 * BUSCO:
   * https://hub.docker.com/r/ezlabgva/busco
   * https://busco.ezlab.org/
-
-### Nextflow:
-If you're unfamiliar with Nextflow or would like to just learn more, consider doing these free trainings found here: https://training.nextflow.io/
-The Nextflow documentation is super helpful as well, especially to learn more about what process directives and profile configurations you can include in your local copy of `stylo.config`. An entire section is dedicated to just containers which should help troubleshoot any issues with Singularity or assist in using Docker instead. Nextflow documentation can be found here: https://www.nextflow.io/docs/latest/index.html
-
-If you're a CDC user, you should register for Scicomp's Nextflow tutorials here: https://info.biotech.cdc.gov/info/training-portal-updated-tracks/
-Or you can access the material directly here: https://training.biotech.cdc.gov/nextflow/
-
-## Thanks
-Special thanks to: 
-* Jess Chen, Lee Katz, and Curtis Kapsak for their enthusiastic guidance and wealth of data science expertise
-* Kaitlin Tagg and Hattie Webb for their encouragement and passion for plasmids that started this whole venture
-* StaPH-B who are an indispensable resource for bioinformatics in public health
-* Seqera whose workshop is a fantastic introduction to writing in Nextflow
-* OpenAI - ChatGPT is an amazing tool for looking up documentation, especially when you're a bad coder
-
-## Etymology
-The names 'Schtappe', 'Stylo', 'Messer', and 'Geteilt' are all spells from a wonderful book series called Ascendance of a Bookworm by Miya Kazuki. Obviously, they're all German words. The meaning of the spells all somewhat capture their respective purposes. 
