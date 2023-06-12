@@ -5,7 +5,7 @@ Nanopore assembly workflow from basecalled reads to polished assembly plus assem
 ## Install
 Navigate to your home directory and git clone the repository.
 ```bash
-$ git clone https://github.com/ncezid-narst/Schtappe.git
+$ git clone https://github.com/ncezid-narst/stylo.git
 ```
 You will need to install Nextflow if you don't already have it: https://www.nextflow.io/docs/latest/getstarted.html
 
