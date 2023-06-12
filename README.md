@@ -91,7 +91,7 @@ NOTE: The default profile settings were mostly pulled from recommendations made 
 ## Usage
 Once you've made the necessary changes to the configuration file to run the workflow on your computing environment and have set up inital parameters, you can run stylo just as you would any nextflow workflow:
 ```bash
-nextflow run /path/to/nanoporeWorkflow/schtappe/stylo.nf -c /path/to/nanoporeWorkflow/config/stylo.config
+nextflow run /path/to/stylo/schtappe/stylo.nf -c /path/to/stylo/config/stylo.config
 ```
 Nextflow is picky about single-hyphen flags vs. double-hyphen flags. Single-hyphens affect the nextflow command while double-hyphens affect the parameters in the configuration file. For example, to change the initial parameters without directly editing `stylo.config`:
 ```bash
@@ -104,19 +104,19 @@ nextflow run /path/to/nanoporeWorkflow/schtappe/stylo.nf -c /path/to/nanoporeWor
 
 By default, nextflow will run locally. If you want to specify a profile, use the `-profile` flag. For example, to qsub stylo's processes:
 ```bash
-nextflow run /.../nanoporeWorkflow/schtappe/stylo.nf -c /.../nanoporeWorkflow/config/stylo.config -profile sge
+nextflow run /.../stylo/schtappe/stylo.nf -c /.../stylo/config/stylo.config -profile sge
 ```
 
 You can change the queue by adding the auxiliary profile name, separated by a comma:
 ```bash
-nextflow run /.../nanoporeWorkflow/schtappe/stylo.nf -c /.../nanoporeWorkflow/config/stylo.config -profile sge,highmem
+nextflow run /.../stylo/schtappe/stylo.nf -c /.../stylo/config/stylo.config -profile sge,highmem
 ```
 Run `nextflow help` or `nextflow run -help` for more information on nextflow flags.
 
 NOTE: Nextflow applies the same parameters to each sample being processed. This means you'll want to run stylo on read sets all of the same organism or at least the same genome size and all have been generated using the same chemistry and guppy basecaller version (affects flye_read_type and medaka_model) This could change in the future by adding more fields to the sampleinfo sheet, but for now it is what it is.
 
 ## Output
-Here's what stylo output looks like per sample(directories only):
+Here's what stylo output looks like per sample (directories only):
 ```bash
 stylo/
 └── PNUSAS002131
