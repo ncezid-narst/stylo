@@ -15,7 +15,7 @@ If you're working on CDC servers, run `module load nextflow/XX.XX.X` to load Nex
 
 As of 4/17/2023, this workflow was developed on Nextflow version 22.10.6.
 
-## Overview:
+## Overview
 * READFILTERING - Filters reads based on read-length using Nanoq
 * DOWNSAMPLE - Randomly downsamples read set based on organism genome size and desired coverage using Rasusa
 * ASSEMBLE - Generates long-read assembly using Flye
@@ -30,7 +30,7 @@ As of 4/17/2023, this workflow was developed on Nextflow version 22.10.6.
 
 ![image](https://user-images.githubusercontent.com/112518496/232568302-f03f21ca-0918-402c-a3e5-2bd499e1a135.png)
 
-## Parameters:
+## Parameters
 Parameters for each process can be changed in `stylo.config` under the first bracketed section `params`. Check out [Resources](#resources) for links to each process's main github page to learn more about process-specific parameters.
 
 Prior to running stylo, make sure the INITIAL PARAMETERS are set accurately - the default settings are as follows:
@@ -72,10 +72,10 @@ You can see how parameters are used in the next section **Usage**.
 
 NOTE: Support for hybrid assemblies using short-reads hasn't been added yet. This option was added as an experiment to test how well k-mer based assemblers perform with ONT's v14/r10.4.1 chemistry.
 
-## Processes:
+## Processes
 Directives for each process can be changed in `stylo.config` under the second bracketed section `process`. This is where you can update the containers used in each process. Check out [Resources](#resources) to see a full list of all the containers and the tools' githubs.
 
-## Profiles:
+## Profiles
 Configuration settings for each profile can be changed in `stylo.config` under the third bracketed section `profiles`. This is where you can update or create profiles that will dictate where and how each process is run. By default, there are two main profiles and three auxiliary profiles:
 
 * `standard`: Will execute stylo using the 'local' executor, running processes on the computer where Nextflow is launched. 
