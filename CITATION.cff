@@ -1,0 +1,28 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: stylo
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Justin
+    family-names: Kim
+    email: mwq9@cdc.gov
+    affiliation: Enteric Diseases Laboratory Branch
+    orcid: 'https://orcid.org/0000-0001-8745-9612'
+repository-code: 'https://github.com/ncezid-narst/stylo'
+abstract: >-
+  Nanopore assembly workflow from basecalled reads to
+  polished assembly plus assembly QC, metrics, and plasmid
+  replicon detection
+keywords:
+  - ONT
+  - nanopore
+  - assembly
+  - long-read
+  - longread
+  - schtappe
+license: MIT
