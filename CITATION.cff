@@ -13,6 +13,11 @@ authors:
     email: mwq9@cdc.gov
     affiliation: Enteric Diseases Laboratory Branch
     orcid: 'https://orcid.org/0000-0001-8745-9612'
+  - given-names: Joe
+    family-names: Wirth
+    email: uma2@cdc.gov
+    affilitaion: Enteric Disease Laboratory Branch
+    orcid: 'https://orcid.org/0000-0002-9750-2845'
 repository-code: 'https://github.com/ncezid-narst/stylo'
 abstract: >-
   Nanopore assembly workflow from basecalled reads to
