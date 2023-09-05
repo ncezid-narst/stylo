@@ -7,6 +7,24 @@ Test nextflow script for stylo workflow
 /*
 PROCESSES
 */
+process CHECK_FILES {
+	/**
+	* checks if the files specified in the input file are also present in the
+	* input directory. Does not return. Raises an error if files are missing.
+	*/
+	errorStrategy = 'terminate'
+
+	input:
+	tuple val(fn), val(filePattern)
+
+	"""
+	#!/usr/bin/env python3.11
+	from checkFile import main
+
+	main($fn, $filePattern)
+	"""
+}
+
 process READFILTERING {
 	tag "Nanoq on $sample_id"
 	publishDir "${params.outdir}/${sample_id}/reads/", mode: 'copy'
