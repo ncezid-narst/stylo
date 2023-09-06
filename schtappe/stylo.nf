@@ -85,6 +85,11 @@ process ASSEMBLE {
 	tuple val(sample_id), path("flye/assembly.fasta"), path(reads), path("flye")
 	
 	script:
+	if (params.flye_asm_coverage)
+	"""
+	flye ${params.flye_read_type} $reads -g ${params.flye_genome_size} -o flye --threads ${params.flye_threads} --asm-coverage ${params.flye_asm_coverage}
+	"""
+	else
 	"""
 	flye ${params.flye_read_type} $reads -g ${params.flye_genome_size} -o flye --threads ${params.flye_threads}
 	"""
