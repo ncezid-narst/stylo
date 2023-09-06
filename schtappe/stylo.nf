@@ -7,7 +7,13 @@ Test nextflow script for stylo workflow
 /*
 PROCESSES
 */
+
 process READFILTERING {
+	/*
+	- READFILTERING uses Nanoq to filter basecalled ONT reads based on READ LENGTH, default value in config file is set to 1000bp
+	- Inputs (per sample): sample name and path to reads from rawreads channel
+	- Output: filtered reads (sample_id_nanoq.fastq.gz) and log of nanoq (redirected stdout)
+	*/
 	tag "Nanoq on $sample_id"
 	publishDir "${params.outdir}/${sample_id}/reads/", mode: 'copy'
 	errorStrategy = 'ignore'
@@ -25,6 +31,11 @@ process READFILTERING {
 }
 
 process DOWNSAMPLE {
+	/*
+	- DOWNSAMPLE uses rasusa to randomly subsample basecalled ONT reads
+	- Input: sampleid, nanoq-filtered reads
+	- Output: sampleid, rasusa&nanoq filtered reads, rasusa log file (redirected stdout)
+	*/
 	tag "Rasusa on $sample_id"
 	publishDir(
 		path: "${params.outdir}/${sample_id}/reads/",
@@ -50,6 +61,12 @@ process DOWNSAMPLE {
 }
 
 process ASSEMBLE {
+	/*
+	- ASSEMBLE uses flye to assemble long-reads
+	- Input: sampleid, path to filtered&downsampled reads
+	- Output: sampleid, flye assembly & output directory
+	*/
+	
 	tag "Flye on $sample_id"
 	publishDir (
 		path: "${params.outdir}/${sample_id}/",
@@ -74,6 +91,11 @@ process ASSEMBLE {
 }
 
 process HYBRID {
+	/*
+	- HYBRID uses Unicycler to assemble using both short reads and long reads in conjunction
+	- Input: sampleid, path to paired end reads, path to long reads
+	- Output: sampleid, hybrid assembly
+	*/
 	tag "Unicycler on $sample_id"
 	publishDir (
 		path: "${params.outdir}/${sample_id}/",
@@ -98,6 +120,11 @@ process HYBRID {
 }
 
 process ROTATE {
+	/*
+	ROTATE uses circlator to change the starting point of the chromosomal contig to a default point
+	- Input: sampleid, flye assembly
+	- Output: sampleid, rotated flye assembly
+	*/
 	tag "Circlator on $sample_id"
 	publishDir(
 		path: "${params.outdir}/${sample_id}/flye",
@@ -122,6 +149,11 @@ process ROTATE {
 }
 
 process POLISH {
+	/*
+	POLISH uses medaka to polish the flye assembly
+	- Input: sampleid, flye assembly
+	- Output: sampleid, polished assembly, medaka output directory
+	*/
 	tag "Medaka on $sample_id"
 	errorStrategy = 'ignore'
 	
@@ -138,6 +170,11 @@ process POLISH {
 }
 
 process RENAME {
+	/*
+	RENAME changes the file name of the polished assembly using the sampleid that's been carried through the entire workflow
+	- Input: sampleid, polished assembly
+	- Output: renamed assembly
+	*/
 	tag "Rename final assembly for $sample_id"
 	publishDir(
 		path: "${params.outdir}/${sample_id}/medaka/",
@@ -162,6 +199,11 @@ process RENAME {
 }
 
 process FORMATREADS {
+	/*
+	FORMATEREADS uses seqtk to convert the reads from fastq to fasta (staramr takes fasta only)
+	- Input: long reads
+	- Output: sampleid, reformatted assembly
+	*/
 	tag "Reformatting reads for $sample_id"
 	errorStrategy = 'ignore'
 	
@@ -178,6 +220,11 @@ process FORMATREADS {
 }
 
 process PLASMIDCHECK {
+	/*
+	PLASMIDCHECK uses starmar to run staramr on both the reads and assembly a check for known, major plasmid contigs + resistance determinants
+	- Input: sampleid, path to reads, path to assembly
+	- Output: sampleid, staramr output for assembly, staramr output for reads
+	*/
 	tag "Staramr on ${sample_id}"
 	publishDir (
 		path: "${params.outdir}/${sample_id}/",
@@ -205,6 +252,11 @@ process PLASMIDCHECK {
 }
 
 process SOCRU {
+	/*
+	SOCRU uses socru to check the assembly for structural biological improbability, returning a color: green, yellow, amber, red - as inditcators for 'assembly health' 
+	- Input: sampleid, assembly, reads, genus, and species
+	- OUtput: sampleid, socru output files
+	*/
 	tag "Socru on $sample_id"
 	publishDir (
 		path: "${params.outdir}/${sample_id}/socru/",
@@ -275,6 +327,11 @@ process SOCRU {
 }
 
 process ASSEMBLYQC {
+	/*
+	ASSEMBLYQC uses BUSCO as a final assembly metrics + quality check
+	- Input: sampleid, final assembly
+	- OUtput: sampleid, busco output directory
+	*/
 	tag "Busco on $sample_id"
 	publishDir (
 		path: "${params.outdir}/${sample_id}/",
