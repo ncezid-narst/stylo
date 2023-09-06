@@ -15,7 +15,7 @@ def __getExpectedFiles(fn:str) -> list[str]:
     """
     # constants
     SEP = "\t"
-    FILE_IDX = 0
+    FILE_IDX = 1
     
     # initialize output
     outL = list()
@@ -29,6 +29,8 @@ def __getExpectedFiles(fn:str) -> list[str]:
             else:
                 # save the filename
                 outL.append(line.split(SEP)[FILE_IDX])
+    
+    return outL
 
 
 def __findMissingFiles(existing:set[str], expected:list[str]) -> list[str]:
