@@ -67,15 +67,21 @@ def main(fn:str, filePattern:str) -> None:
         FileNotFoundError: one or more expected files do not exist
     """
     # constants
-    ERR_MSG_A = 'the following files were not found in the '
-    ERR_MSG_B = "directory:\n\n"
+    ALLOWED_EXT = "fastq.gz"
+    ERR_MSG_1 = 'file pattern does not end in the expected format (' + ALLOWED_EXT + ")"
+    ERR_MSG_2A = 'the following files were not found in the '
+    ERR_MSG_2B = "directory:\n\n"
+    
+    # check that the file pattern has the correct extension
+    if filePattern[-len(ALLOWED_EXT):] != ALLOWED_EXT:
+        raise BaseException(ERR_MSG_1)
     
     # get the existing files and the expected files
-    existingFiles = {os.path.basename(x) for x in glob.glob(filePattern)}
+    existingFiles = {os.path.splitext(os.path.basename(x))[0] for x in glob.glob(filePattern)}
     expectedFiles = __getExpectedFiles(fn)
     
     missingFiles = __findMissingFiles(existingFiles, expectedFiles)
     
     if missingFiles != []:
-        raise FileNotFoundError(ERR_MSG_A + os.path.dirname(filePattern) + \
-                                ERR_MSG_B + "\n".join(missingFiles))
+        raise FileNotFoundError(ERR_MSG_2A + os.path.dirname(filePattern) + \
+                                ERR_MSG_2B + "\n".join(missingFiles))
