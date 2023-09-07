@@ -245,7 +245,7 @@ process PLASMIDCHECK {
 	
 	script:
 	"""
-	staramr db update databases
+	staramr db update --resfinder-commit ${params.staramr_resfinder_commit} --pointfinder-commit ${params.staramr_pointfinder_commit} --plasmidfinder-commit ${params.staramr_plasmidfinder_commit} databases
 	staramr search --pid-threshold 90 --percent-length-overlap-resfinder 50 --no-exclude-genes --database databases -o "staramr_reads" ${reads_fasta}
 	staramr search --pid-threshold 90 --percent-length-overlap-resfinder 50 --no-exclude-genes --database databases -o "staramr_assembly" ${assembly}
 	"""
