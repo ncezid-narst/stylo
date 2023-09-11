@@ -4,6 +4,35 @@
 import glob, os
 
 
+def __getExistingFiles(pattern:str, extension:str) -> set[str]:
+    """retrieves a set of files that exist given a specified pattern
+
+    Args:
+        pattern (str): a glob pattern to find files
+        extension (str): the allowed file extension for the files
+
+    Returns:
+        set[str]: a set of files with the extension matching the pattern
+    """
+    # try to get the files using the specified pattern
+    result = {os.path.basename(x) for x in glob.glob(pattern, recursive=True)}
+    
+    # modify the pattern if this failed
+    if result == set() and "**" in pattern:
+        # truncate everything after the double star
+        pattern = pattern[:pattern.find("**")+2]
+        
+        # only keep the files that end in the specified extension
+        result = {os.path.basename(x) for x in glob.glob(pattern, recursive=True) if x[-len(extension):]==extension}
+    
+    # make sure the extension begins with a period then drop the extension from the results
+    if extension[0] != ".":
+        extension = "." + extension
+    result = {x[:-len(extension)] for x in result}
+    
+    return result        
+
+
 def __getExpectedFiles(fn:str) -> list[str]:
     """gets a list of expected files from an input file containing the filenaems
 
@@ -70,18 +99,20 @@ def main(fn:str, filePattern:str) -> None:
     ALLOWED_EXT = "fastq.gz"
     ERR_MSG_1 = 'file pattern does not end in the expected format (' + ALLOWED_EXT + ")"
     ERR_MSG_2A = 'the following files were not found in the '
-    ERR_MSG_2B = "directory:\n\n"
+    ERR_MSG_2B = " directory:\n\n"
     
     # check that the file pattern has the correct extension
     if filePattern[-len(ALLOWED_EXT):] != ALLOWED_EXT:
         raise BaseException(ERR_MSG_1)
     
     # get the existing files and the expected files
-    existingFiles = {os.path.splitext(os.path.basename(x))[0] for x in glob.glob(filePattern)}
+    existingFiles = __getExistingFiles(filePattern, ALLOWED_EXT)
     expectedFiles = __getExpectedFiles(fn)
     
+    # find any missing files
     missingFiles = __findMissingFiles(existingFiles, expectedFiles)
     
+    # raise an error and report any missing files
     if missingFiles != []:
         raise FileNotFoundError(ERR_MSG_2A + os.path.dirname(filePattern) + \
                                 ERR_MSG_2B + "\n".join(missingFiles))
