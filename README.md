@@ -28,8 +28,6 @@ As of 4/17/2023, this workflow was developed on Nextflow version 22.10.6.
 * SOCRU - Does Socru (*shrug) 
 * ASSEMBLYQC - Generates assembly quality metrics using BUSCO
 
-![image](https://user-images.githubusercontent.com/112518496/232568302-f03f21ca-0918-402c-a3e5-2bd499e1a135.png)
-
 ## Parameters
 Parameters for each process can be changed in `stylo.config` under the first bracketed section `params`. Check out [Resources](#resources) for links to each process's main github page to learn more about process-specific parameters.
 
