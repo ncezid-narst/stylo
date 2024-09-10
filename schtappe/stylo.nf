@@ -286,9 +286,9 @@ workflow {
 	rename_ch = RENAME(medaka_ch)
 		.map{ outTuple -> outTuple[0,1,2] }
 		.join(import_ch, by: 0)
-		.view()
+		//.view()
 	busco_ch = ASSEMBLYQC(rename_ch)
 		.map{ outTuple -> outTuple[0,1,2,3,4] }
-		.view()
+		//.view()
 	socru_ch = SOCRU(busco_ch)
 }
