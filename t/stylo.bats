@@ -37,6 +37,7 @@ function note(){
 	fi
 	note "Run singularity container of sratoolkit"
 	mkdir -pv ${thisDir}/stylo.test/
+	(
 	cd ${thisDir}/stylo.test/
 	singularity exec -B $PWD:/data --no-home --cleanenv docker://pegi3s/sratoolkit:3.0.1 fasterq-dump --outdir fastq_pass --outfile C347.fastq.gz --progress --concatenate-reads SRR22859768
 	note "Create samplesheet, add headers, add metadata"
@@ -45,6 +46,7 @@ function note(){
 	printf '\nbarcode01\tC347\tStaphylococcus\taureus' >> ${thisDir}/stylo.test/sampleinfo.txt
 	note "Run stylo"
 	nextflow run ${nfDir}/stylo.nf -c ${configDir}/stylo.config -profile standard --rasusa_genome_size 2.9MB --rasusa_coverage 20 --flye_genome_size 2.9m --medaka_model r941_min_sup_g507
+	)
 }
 
 @test "Stylo - Output" {
